@@ -1,6 +1,6 @@
-##########################################
-##### DEGs for Mixed subclusters #####
-##########################################
+################################################
+##### Preprocessing data for DEGs analysis #####
+################################################
 work_dir='/path/to/working/directory/'
 data='/path/to/data.h5ad'
 metadata='/path/to/metadata.csv'
@@ -26,7 +26,7 @@ data <- read_h5ad(data)
 counts = data$layers["counts"]
 counts = CreateSeuratObject(counts = t(as.matrix(counts)), meta.data=data$obs)
 
-# Calculate pseudobulk data
+# Calculate pseudobulk data by SampleID
 pseudobulk = AggregateExpression(counts, group.by = "SampleID", assay = "RNA", slot = "counts")
 
 # Extract pseudobulked count data from Seurat object and make it a matrix
