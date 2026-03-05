@@ -53,4 +53,5 @@ The pipeline can be run interactively in R in the following order:
        - Controls vs. Conditon DEGs after LFCShrink (`outs/DEGs.csv`)
 
 The necessary scripts can be found in scripts/
+
 ***Note: Be sure to change the paths in the scripts to fit your data***
