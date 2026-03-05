@@ -2,8 +2,8 @@
 ##### Preprocessing data for DEGs analysis #####
 ################################################
 work_dir='/path/to/working/directory/'
-data='/path/to/data.h5ad'
-metadata='/path/to/metadata.csv'
+data_h5ad='/path/to/data.h5ad'
+metadata_csv='/path/to/metadata.csv'
 
 setwd(work_dir)
 
@@ -20,7 +20,7 @@ library(ggplot2)
 
 ##### All clusters #####
 # Gather raw pseudobulk data
-data <- read_h5ad(data)
+data <- read_h5ad(data_h5ad)
 
 # Get count data from .h5ad file
 counts = data$layers["counts"]
@@ -35,7 +35,7 @@ count_matrix = as.matrix(count_matrix)
 
 # Work with Metadata
 ### Read in the metdata to see the sample numbers
-metadata = read.csv(metadata)
+metadata = read.csv(metadata_csv)
 
 length(unique(metadata$SampleID))
 
