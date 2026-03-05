@@ -5,7 +5,6 @@ work_dir='/path/to/working/directory/'
 
 setwd(work_dir)
 
-
 library(DESeq2)
 library(ggplot2)
 library(airway)
@@ -45,8 +44,15 @@ dds <- DESeqDataSetFromMatrix(countData = counts,
                               design = ~ <covariates>)
 
 # Replace `<covariates>` with the variable(s) of interest (e.g., `condition`, `diagnosis`, or additional covariates such as `age + sex + condition`) according to your experimental design.
+
 # Relevel so Control is the reference
-dds$general_disease <- relevel(dds$general_disease, ref = "Control")
+dds$<covariate-of-interest> <- relevel(dds$general_disease, ref = "Control")
+
+## TO RUN WITH CONTRASTS (No need to relevel since you are specifying the contrasts)
+# dds <- DESeqDataSetFromMatrix(countData = counts,
+#                              colData = metadata,
+#                              design = ~ 0 + <covariates>)
+
 
 # filter out genes that have less than 10 counts across at least 3 individuals.
 individual_counts <- rowSums(counts(dds) >= 10)
@@ -58,8 +64,13 @@ dds = DESeq(dds)
 # Get results names for contrasts
 resultsNames(dds)
 
-noShrink_res <- results(dds, independentFiltering = FALSE, name = "general_disease_AD_vs_Control")
+noShrink_res <- results(dds, independentFiltering = FALSE, name = "name_of_comparison_of_interest_listed_in_resultsNames(dds)")
 noShrink_res
+
+## TO RUN WITH CONTRASTS - In "contrast = " the first position = covariate of interest, second positon = treatment condition, third position = control
+#noShrink_res <- results(dds, independentFiltering = FALSE, contrast = c("covariate", "treatment", "control"))
+#noShrink_res
+
 
 write.csv(as.data.frame(noShrink_res), 
           file="outs/preShrink.csv")
@@ -69,7 +80,11 @@ write.csv(as.data.frame(noShrink_res),
 resultsNames(dds)
 
 # Shrinnk results for both comparisons: FTD vs. Control and AD vs. Control
-shrink_res = lfcShrink(dds, coef="general_disease_AD_vs_Control", type="apeglm", res = noShrink_res)
+shrink_res = lfcShrink(dds, coef="name_of_comparison_of_interest_listed_in_resultsNames", type="apeglm", res = noShrink_res)
+
+## TO RUN WITH CONTRASTS - In "contrast = " the first position = covariate of interest, second positon = treatment condition, third position = control
+#shrink_res = lfcShrink(dds, contrast = c("covariate", "treatment", "control"), type="ashr", res = noShrink_res)
+
 
 # Reorder results by smalles p-value
 resOrdered <- shrink_res[order(shrink_res$pvalue),]
@@ -105,9 +120,7 @@ EnhancedVolcano(res_df,
                 FCcutoff = 1,
                 pointSize = 3.0,
                 labSize = 6.0,
-                #ylim = c(0, 4),
                 drawConnectors = TRUE,
                 ylab = '-Log10(padj)',
-                #title = "AD vs. Control",
                 subtitle = "Differential Gene Expression")
 

@@ -46,7 +46,8 @@ The pipeline can be run interactively in R in the following order:
      These files are aligned and formatted for downstream DEG analysis.
 2. DEGs.R
     - Runs differential gene expression analysis and visualizes data (MA and volcano plots)
-    - This script is designed to filter out genes that have less than 10 counts across at least 3 individuals. To change this, edit lines 49 and 50.
+    - This script is designed to filter out genes that have less than 10 counts across at least 3 individuals. To change this, edit lines 59 and 60.
+    - There is an option to run with contrasts (line 52-55, 71-73, and 86-87)
     - Outputs:
        - Controls vs. Conditon DEGs before LFCShrink (`outs/preShrink.csv`)
        - Controls vs. Conditon DEGs after LFCShrink (`outs/DEGs.csv`)
